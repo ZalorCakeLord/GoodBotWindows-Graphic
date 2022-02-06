@@ -26,6 +26,8 @@ File Explorer<br>
     <input id="chat-input" type="text" style="width:30%;height:30px;" autocomplete="off">
      <input class = "btn" type="submit" value="Send"></input>
 </form>
+<button onclick="fileclose()">close file</button>
+<p id="fileview">no files open</p>
 <button onclick="cdup()">🔼</button><button onclick="refreshDir()">🔄</button>DIR: <br>
 <par id="activedir"></par><br>
 <div class="boxed">
@@ -50,7 +52,12 @@ function setdirect(x) {
 function cddirect(x) {
   socket.emit('cddirect',x)
 }
-
+function fileclose() {
+  $('#fileview').html('no files open');
+}
+socket.on('fileview',function(data){
+  $('#fileview').html(data);
+})
 socket.on('warn',function(data){
   $('#warning').html(data);
 })
