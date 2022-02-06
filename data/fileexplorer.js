@@ -36,4 +36,4 @@ function cdup(){
 
 
 //const boblib = require('./functions.js');
-module.exports = { displaydir , cd, cddir }
+module.exports = { displaydir , cd, cdup }

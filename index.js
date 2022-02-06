@@ -3,11 +3,55 @@ var express = require('express');
 var app = express();
 const fetch = require('node-fetch');
 var server = require('http').createServer(app);
-const fileexplorer = require('./data/fileexplorer.js');
+function displaydir(){
+  let array = fs.readdirSync(dir)
+  let max = array.length
+  for(let i=0;i<max;i++){
+    if(array[i].includes('.mp3')){
+      let old = array[i]
+      olda = old.replace(/([^'\\]*(?:\\.[^'\\]*)*)'/g, "$1\\'");
+      array[i] = `<button style="background-color:##1F85DE;" onclick="setdirect('${olda}')">⏯${old}</button>`
+    }
+    else if(!array[i].includes('.')){
+      let old = array[i]
+      olda = old.replace(/([^'\\]*(?:\\.[^'\\]*)*)'/g, "$1\\'");
+      array[i] = `<button style="background-color:##1F85DE;" onclick="cddirect('${olda}')">📁${old}</button>`
+    }
+		else if(array[i].includes('.txt')){
+      let old = array[i]
+      olda = old.replace(/([^'\\]*(?:\\.[^'\\]*)*)'/g, "$1\\'");
+      array[i] = `<button style="background-color:##1F85DE;" onclick="setdirect('${olda}')">📝${old}</button>`
+    }
+
+  }
+  let aloha = array
+  aloha = aloha.join('<br>')
+  aloha = `Contents of ${dir}:<br>` + aloha + `<br>End Contents of ${dir}`
+  return(aloha)
+}
+
+
+function cd(targ){
+  if (fs.existsSync(`${dir}/${targ}`)){
+  dir = `${dir}/${targ}`
+  cd = targ
+  console.log(`Directory is now ${dir}`)
+}    else{socket.emit('warn',`${`${dir}/${targ}`} does not exist!`)}
+    }
+
+function cdup(){
+  dir = dir.substr(0, dir.lastIndexOf('/'));
+  console.log(`Directory is now ${dir}`)
+}
+//compatible file handles check
+function isCompatible(file){
+	let compatible = ['txt','jpg','png','html']
+	let name = file.split('.')
+	if(name.length>2){return false}
+	return(compatible.includes(name[1]))
+}
+
 //command handling
-
-
-
 const Discord = require('discord.js');
 commands = new Discord.Collection();
 cmdlist = []
@@ -78,7 +122,7 @@ function listCommands(){
 }
 
 
-dir = 'c:/users/'
+let dir = 'c:/users/'
 var	spawn = require('child_process').spawn,
   events = require('events'),
   util = require('util');
@@ -87,12 +131,34 @@ app.get('/',function(req, res) {
 });
 app.use('/client',express.static(__dirname + '/client'));
 var io = require('socket.io')(server);
+sockets = new Discord.Collection();
+const socketFiles = fs.readdirSync('./sockets').filter(file => file.endsWith('.js'));
+for (const file of socketFiles) {
+	const socket = require(`./sockets/${file}`);
 
+	// set a new item in the Collection
+	// with the key as the command name and the value as the exported module
+  sockets.set(socket.name, socket);
+}
 io.sockets.on('connection', function(socket){
         var socketId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
         console.log(commands)
+				function dirupdate(){
+          socket.emit('dir',[dir,displaydir(dir)])
+        }
+        //socket handler, index is getting too messy
+				socket.onAny((eventName, ...args) => {
+					console.log(`SOCKET EVENT: ${eventName}, ${args}`)
+					/*const socket = sockets.get(eventName)
+						|| socket.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-
+						try {
+							socket.execute(socket, args, io);
+						} catch (error) {
+							console.error(error);
+							console.log('there was an error trying to execute that command!');
+						}*/
+        });
 
         console.log('new user!');
         socket.on('start',function(){
@@ -105,7 +171,7 @@ io.sockets.on('connection', function(socket){
 						if(commandName === 'refresh'){socket.emit('output',refreshCommands())}
 						if(commandName === 'list'){socket.emit('output',listCommands())}
             list.shift(); let args = list
-            console.log(`commandName:${commandName}\nargs:${args}\nIs a valid command? ${cmdIsValid(commandName)}`)
+
             if(cmdIsValid(commandName)&&commandName!=='refresh'&&commandName!=='list'){
             const command = commands.get(commandName)
               || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -122,9 +188,57 @@ io.sockets.on('connection', function(socket){
 
         });
 
-        socket.on('recieved',function(x){
-            console.log(`reciept of ${x} confirmed`)
 
+
+
+
+
+
+
+
+
+				socket.on('filecmd',function(data){
+          let stringform = data
+          data = data.toLowerCase().split(' ')
+          switch (data[0]) {
+            case 'dir':
+            socket.emit('dir',[dir,displaydir(dir)])
+
+              break;
+            case 'cd':
+            if (fs.existsSync(`${dir}/${data[1]}`)){
+            dir = `${dir}/${data[1]}`
+            dirupdate()
+            console.log(`Directory is now ${dir}`)
+          }    else{socket.emit('warn',`${`${dir}/${data[1]}`} does not exist!`)}
+
+              break;
+            case 'cdtrue':
+              if (fs.existsSync(`${data[1]}`)){
+              dir = `${data[1]}`
+              dirupdate()
+            }else(socket.emit('warn','Invalid Directory'))
+              break;
+
+            default:
+              socket.emit('warn','Invalid Input')
+          }
+
+
+        });
+        socket.on('cdup',function(){
+            cdup()
+            socket.emit('dir',[dir,displaydir(dir)])
+        });
+        //this baby gettin downright labrynthine
+				socket.on('viewfile',function(data){
+           console.log('file clicked')
+        });
+
+        socket.on('cddirect',function(data){
+            if(fs.existsSync(`${dir}/${data}`)){
+            dir = `${dir}/${data}`
+            dirupdate()}
         });
 
 
