@@ -1,0 +1,99 @@
+module.exports = {
+	name: 'ccv',
+	description: 'ccv pennies nickels dimes quarters halfdollars dollars',
+    args: false,
+	async execute(socket, args, io) {
+		    for(let i=0;i<6;i++){
+					if(args[i] == undefined || isNaN(args[i])){args[i] = 0}
+				}
+            const fs = require('fs');
+						const prompt = require('prompt-sync')();
+				let pennya = args[0]
+
+        penny = pennya*0.01
+				let nickela = args[1]
+        nickel = nickela*0.05
+
+				let dimea = args[2]
+        dime = dimea*0.10
+				let quartera = args[3]
+        quarter = quartera*0.25
+				let halfdollara = args[4]
+        halfdollar = halfdollara*0.50
+				let dollara = args[5]
+        dollar = dollara*1
+        let total = penny+nickel+dime+quarter+halfdollar+dollar
+
+        socket.emit('output',`
+<abody style="width: 33%;
+                height: 52%;
+                margin: auto;
+							  background-color:Black;
+                padding: 0;">
+								<style type="text/css">
+								.tg  {border-collapse:collapse;border-spacing:0;}
+								.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+								  overflow:hidden;padding:10px 5px;word-break:normal;}
+								.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+								  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+								.tg .tg-ipif{background-color:#2c2f33;border-color:#23272a;color:#ffffff;font-family:Impact, Charcoal, sans-serif !important;;
+								  text-align:left;vertical-align:top}
+								.tg .tg-rcjw{background-color:#2c2f33;border-color:#23272a;color:#ffffff;font-family:Arial, Helvetica, sans-serif !important;;
+								  text-align:left;vertical-align:top}
+								.tg .tg-kfj7{background-color:#2c2f33;border-color:#23272a;color:#ffffff;text-align:left;vertical-align:top}
+								</style>
+								<table class="tg">
+								<thead>
+								  <tr>
+								    <th class="tg-ipif">Coin Type</th>
+								    <th class="tg-rcjw">Number Of Coins</th>
+								    <th class="tg-rcjw">Cash Total</th>
+								  </tr>
+								</thead>
+								<tbody>
+								  <tr>
+								    <td class="tg-kfj7">Penny</td>
+								    <td class="tg-kfj7">${pennya}</td>
+								    <td class="tg-kfj7">$${penny.toFixed(2)}</td>
+								  </tr>
+								  <tr>
+								    <td class="tg-kfj7">Nickel</td>
+								    <td class="tg-kfj7">${nickela}</td>
+								    <td class="tg-kfj7">$${nickel.toFixed(2)}</td>
+								  </tr>
+								  <tr>
+								    <td class="tg-kfj7">Dime</td>
+								    <td class="tg-kfj7">${dimea}</td>
+								    <td class="tg-kfj7">$${dime.toFixed(2)}</td>
+								  </tr>
+								  <tr>
+								    <td class="tg-kfj7">Quarter</td>
+								    <td class="tg-kfj7">${quartera}</td>
+								    <td class="tg-kfj7">$${quarter.toFixed(2)}</td>
+								  </tr>
+								  <tr>
+								    <td class="tg-kfj7">Halfdollar</td>
+								    <td class="tg-kfj7">${halfdollara}</td>
+								    <td class="tg-kfj7">$${halfdollar.toFixed(2)}</td>
+								  </tr>
+								  <tr>
+								    <td class="tg-kfj7">Dollar</td>
+								    <td class="tg-kfj7">${dollara}</td>
+								    <td class="tg-kfj7">$${dollar.toFixed(2)}</td>
+								  </tr>
+								  <tr>
+								    <td class="tg-kfj7">Total</td>
+								    <td class="tg-kfj7">${Number(pennya)+Number(nickela)+Number(dimea)+Number(quartera)+Number(halfdollara)+Number(dollara)}</td>
+								    <td class="tg-kfj7">$${total.toFixed(2)}</td>
+								  </tr>
+								</tbody>
+								</table>
+</abody>
+
+
+        `)
+
+
+
+	},
+}
