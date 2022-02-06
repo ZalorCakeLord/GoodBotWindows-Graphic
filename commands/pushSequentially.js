@@ -4,9 +4,11 @@ module.exports = {
 	execute(socket, args, io) {
     function sortPush(array,x){
       let output=[]
+      if(isNaN(x)||x==undefined){return array}
       if(x<=array[0]){output=array;output.unshift(x)}
       for(let i=1;i<array.length;i++){
-
+        let spot = 0
+        if(x>array[i]){spot=i}
       }
     }
 
