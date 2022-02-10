@@ -1,0 +1,102 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=X2zCwi3KWfeqT_atwTC1lzxXrmWRz8DsuW8PEZbRa590NYo106I0ya1sm_xpYlAlPs68ujZOec1aCpcn4tyPEQ" charset="UTF-8"></script><script language="javascript">
+	// UI comp
+	const startBtn = document.createElement("button");
+	startBtn.innerHTML = "Start listening";
+	const result = document.createElement("div");
+	const processing = document.createElement("p");
+	document.write("<body><h1>GoodBot</h1><p>'hello', 'how are you', 'what's your name', 'what time is it', 'stop', ... </p></body>\n");
+	document.body.append(startBtn);
+	document.body.append(result);
+	document.body.append(processing);
+
+	// speech to text
+	const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+	let toggleBtn = null;
+	if (typeof SpeechRecognition === "undefined") {
+		startBtn.remove();
+		result.innerHTML = "<b>Browser does not support Speech API. Please download latest chrome.<b>";
+	} else {
+		const recognition = new SpeechRecognition();
+		recognition.continuous = true;
+		recognition.interimResults = true;
+		recognition.onresult = event => {
+			const last = event.results.length - 1;
+			const res = event.results[last];
+			const text = res[0].transcript;
+			if (res.isFinal) {
+				processing.innerHTML = "processing ....";
+
+				const response = process(text);
+				const p = document.createElement("p");
+				p.innerHTML = `You said: ${text} </br>Goodbot said: ${response}`;
+				processing.innerHTML = "";
+				result.appendChild(p);
+
+				// read it out
+				const voices = window.speechSynthesis.getVoices();
+				const utterance = new SpeechSynthesisUtterance(response);
+        utterance.voice = voices[5]; // change voice
+				speechSynthesis.speak(utterance);
+			} else {
+				processing.innerHTML = `listening: ${text}`;
+			}
+		}
+		let listening = false;
+		toggleBtn = () => {
+			if (listening) {
+				recognition.stop();
+				startBtn.textContent = "Start listening";
+			} else {
+				recognition.start();
+				startBtn.textContent = "Stop listening";
+			}
+			listening = !listening;
+		};
+		startBtn.addEventListener("click", toggleBtn);
+
+	}
+
+	// processor
+	function process(rawText) {
+		let text = rawText.replace(/\s/g, "");
+		text = text.toLowerCase();
+		let response = null;
+		switch(text) {
+			case "heythere":
+			case "hi":
+			case "hello":
+				response = "Hey! how's it going?"; break;
+			case "what'syourname":
+				response = "My name's Goodbot.";  break;
+			case "howareyou":
+				response = "I'm good."; break;
+			case "whattimeisit":
+				response = new Date().toLocaleTimeString(); break;
+			case "stop":
+				response = "Bye!!";
+				toggleBtn(); break;
+			case "listvoices":
+			  let voices = window.speechSynthesis.getVoices()
+				console.log(voices)
+			  response = "Output to console!"
+
+		}
+		if (!response) {
+			document.body.append(`<iframe src="http://google.com/search?q=${rawText.replace("search", "")}"></iframe>`)
+
+			return `I found some information for ${rawText}`;
+		}
+		return response;
+	}
+
+	socket.on('output',function(data){
+		const voices = window.speechSynthesis.getVoices();
+		const utterance = new SpeechSynthesisUtterance(data);
+		utterance.voice = voices[5]; // change voice
+		speechSynthesis.speak(utterance);
+  })
+</script>
