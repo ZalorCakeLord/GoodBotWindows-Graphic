@@ -1,5 +1,6 @@
-module.exports = { 
+module.exports = {
  format: 'gbweb',
+ replitCompatible:true,
  name: 'echo',
  description:'first command, echos given text',
  usage:'{input}',

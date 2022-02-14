@@ -1,5 +1,6 @@
 module.exports = {
  format:'gbweb',
+ replitCompatible:true,
  name: 'helloworld',
  description:'helloworld',
  execute(socket, args, io){

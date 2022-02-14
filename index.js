@@ -4,6 +4,7 @@ var app = express();
 const fetch = require('node-fetch');
 var server = require('http').createServer(app);
 let dir = './'
+const replit = process.env.REPL_ID
 function displaydir(){
   let array = fs.readdirSync(dir)
   let max = array.length
@@ -123,6 +124,7 @@ function listCommands(){
 		if (command.aliases) desc+=(`<p><b>Aliases:</b> ${command.aliases.join(', ')}.\n</p>`);
 		if (command.description) desc+=(`<p><b>Description:</b> ${command.description}\n</p>`);
 		if (command.usage) desc+=(`<p><b>Usage:</b> ${command.name} ${command.usage}\n</p>`);
+    if (replit===true && command.replitCompatible===false) desc+=(`<p style="color:red"><b>THIS COMMAND IS NOT YET COMPATIBLE WITH REPLIT!</b>\n</p>)`
 		desc+=`</li>\n`
 		output.push(desc)
 	}
@@ -195,14 +197,15 @@ io.sockets.on('connection', function(socket){
 
             if(cmdIsValid(commandName)&&commandName!=='refresh'&&commandName!=='list'){
             let command = commands[getCmd(commandName)]
-
+            if(replit===true&&command.replitCompatible===false){socket.emit('output','<p style="color:red">Sorry, this command is not compatible with Repl.it yet.</p>')}
+            else{
               try {
               	command.execute(socket, args, io);
               } catch (error) {
               	console.error(error);
               	console.log('there was an error trying to execute that command!');
               }
-            }
+            }}
             if(commandName === 'debug'){socket.emit('output',eval(args.join(' ')))}
             if(!cmdIsValid(commandName)&&commandName!=='refresh'&&commandName!=='list'&&commandName!=='debug'){socket.emit('output','Invalid Command!')}
 

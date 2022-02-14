@@ -1,5 +1,6 @@
-module.exports = { 
+module.exports = {
  format: 'gbweb',
+ replitCompatible:true,
  name: 'fs',
  description:'Experimental full function file explorer',
  async execute(socket, args, io){
