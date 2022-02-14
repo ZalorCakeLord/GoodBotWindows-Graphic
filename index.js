@@ -85,7 +85,7 @@ function refreshCommands(){
 	commands = []
 	oldcmds = cmdlist
 	cmdlist = []
-	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.gb'));
   for (const file of commandFiles) {
   	const command = require(`./commands/${file}`);
     if(command.format==="gbweb"){
@@ -98,7 +98,7 @@ function refreshCommands(){
 	for(let i=0;i<cmdlist.length;i++){
 		output.push(`<li>${cmdlist[i]}</li>\n`)
 		if(!oldcmds.includes(cmdlist[i])){
-			let command = commands[getCmd(commandName)]
+			let command = commands[getCmd(cmdlist[i])]
 			let desc = ''
 			desc +=`<li><h3>${cmdlist[i]}</h3>\n`
 			if (command.aliases) desc+=(`<b>Aliases:</b> ${command.aliases.join(', ')}.\n`);
@@ -116,7 +116,7 @@ function listCommands(){
 	let output = []
 
 	for(let i=0;i<cmdlist.length;i++){
-		let command = commands[getCmd(commandName)]
+		let command = commands[i]
 		let desc = ''
 		desc +=`<li><b>${cmdlist[i]}</b>\n`
 		if (command.aliases) desc+=(`<p><b>Aliases:</b> ${command.aliases.join(', ')}.\n</p>`);
