@@ -98,7 +98,7 @@ function refreshCommands(){
 	for(let i=0;i<cmdlist.length;i++){
 		output.push(`<li>${cmdlist[i]}</li>\n`)
 		if(!oldcmds.includes(cmdlist[i])){
-			let command = commands.get(cmdlist[i])
+			let command = commands[getCmd(commandName)]
 			let desc = ''
 			desc +=`<li><h3>${cmdlist[i]}</h3>\n`
 			if (command.aliases) desc+=(`<b>Aliases:</b> ${command.aliases.join(', ')}.\n`);
@@ -116,7 +116,7 @@ function listCommands(){
 	let output = []
 
 	for(let i=0;i<cmdlist.length;i++){
-		let command = commands.get(cmdlist[i])
+		let command = commands[getCmd(commandName)]
 		let desc = ''
 		desc +=`<li><b>${cmdlist[i]}</b>\n`
 		if (command.aliases) desc+=(`<p><b>Aliases:</b> ${command.aliases.join(', ')}.\n</p>`);
@@ -170,7 +170,7 @@ io.sockets.on('connection', function(socket){
 					console.log(`SOCKET EVENT: ${eventName}, ${args}`)
 					/*const socket = sockets.get(eventName)
 						|| socket.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
+           //couldn't do this anymore, removing discord.js
 						try {
 							socket.execute(socket, args, io);
 						} catch (error) {
