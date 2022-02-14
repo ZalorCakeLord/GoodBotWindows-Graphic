@@ -9,6 +9,7 @@
   "author": "Robert Chavana",
   "license": "ISC",
   "dependencies": {
-    "booru": "^2.5.3"
+    "booru": "^2.5.3",
+    "node-fetch": "2.0.0"
   }
 }
