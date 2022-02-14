@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 var server = require('http').createServer(app);
 let dir = './'
 const replit = process.env.REPL_ID
+if(replit !== undefined){replit = true}
 if(replit === true){console.log('running on replit, some commands may not function as intended!')}
 function displaydir(){
   let array = fs.readdirSync(dir)
