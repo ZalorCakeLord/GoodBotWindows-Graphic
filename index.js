@@ -203,7 +203,7 @@ io.sockets.on('connection', function(socket){
               	console.log('there was an error trying to execute that command!');
               }
             }
-            if(commandName === 'debug'){socket.emit('output',args.join(' '))}
+            if(commandName === 'debug'){socket.emit('output',eval(args.join(' ')))}
             if(!cmdIsValid(commandName)&&commandName!=='refresh'&&commandName!=='list'&&commandName!=='debug'){socket.emit('output','Invalid Command!')}
 
 
