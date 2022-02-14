@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 const fetch = require('node-fetch');
 var server = require('http').createServer(app);
+let dir = './'
 function displaydir(){
   let array = fs.readdirSync(dir)
   let max = array.length
@@ -149,7 +150,7 @@ function readTxt(file){
 }
 
 
-let dir = 'c:/users/'
+
 var	spawn = require('child_process').spawn,
   events = require('events'),
   util = require('util');
@@ -160,6 +161,7 @@ app.use('/client',express.static(__dirname + '/client'));
 var io = require('socket.io')(server);
 
 io.sockets.on('connection', function(socket){
+
         var socketId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
         console.log(commands)
 				function dirupdate(){
