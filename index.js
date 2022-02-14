@@ -124,7 +124,7 @@ function listCommands(){
 		if (command.aliases) desc+=(`<p><b>Aliases:</b> ${command.aliases.join(', ')}.\n</p>`);
 		if (command.description) desc+=(`<p><b>Description:</b> ${command.description}\n</p>`);
 		if (command.usage) desc+=(`<p><b>Usage:</b> ${command.name} ${command.usage}\n</p>`);
-    if (replit===true && command.replitCompatible===false) desc+=(`<p style="color:red"><b>THIS COMMAND IS NOT YET COMPATIBLE WITH REPLIT!</b>\n</p>)`
+    if (replit===true && command.replitCompatible===false) desc+=(`<p style="color:red"><b>THIS COMMAND IS NOT YET COMPATIBLE WITH REPLIT!</b>\n</p>`)
 		desc+=`</li>\n`
 		output.push(desc)
 	}
