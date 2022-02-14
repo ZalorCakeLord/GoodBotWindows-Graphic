@@ -202,6 +202,7 @@ io.sockets.on('connection', function(socket){
               }
             }
             if(commandName === 'debug'){socket.emit('output',args.join(' '))}
+            if(!cmdIsValid(commandName)&&commandName!=='refresh'&&commandName!=='list'&&commandName!=='debug'){socket.emit('output','Invalid Command!')}
 
 
         });
