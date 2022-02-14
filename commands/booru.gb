@@ -1,4 +1,5 @@
 module.exports = {
+  format:'gbweb',
 name: 'booru',
  description:'Booru Search. Indev.',
  nsfw:true,

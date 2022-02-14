@@ -1,4 +1,5 @@
 module.exports = {
+	format:'gbweb',
 	name: 'upclookup',
 	description: "Another API handling test.",
 	async execute(socket, args, io) {

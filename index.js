@@ -54,18 +54,16 @@ function isCompatible(file){
 	return(compatible.includes(name[1]))
 }
 
-//command handling
-const Discord = require('discord.js');
-commands = new Discord.Collection();
+//command handling my way now, new format, using .gb and the format property
+let commands = []
 cmdlist = []
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.gb'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-
-	// set a new item in the Collection
-	// with the key as the command name and the value as the exported module
-  commands.set(command.name, command);
+  if(command.format==="gbweb"){
+  commands.push(command);
 	cmdlist.push(command.name);
+}
 }
 
 //check if valid command
@@ -76,19 +74,25 @@ function cmdIsValid(cmd){
   return(false)
 }
 
+function getCmd(cmd){
+  for(let i=0;i<commands.length;i++){
+    if(cmd.toLowerCase() === commands[i].name){return i}
+  }
+  return(false)
+}
+
 function refreshCommands(){
-	commands = new Discord.Collection();
+	commands = []
 	oldcmds = cmdlist
 	cmdlist = []
 	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-	for (const file of commandFiles) {
-		const command = require(`./commands/${file}`);
-
-		// set a new item in the Collection
-		// with the key as the command name and the value as the exported module
-	  commands.set(command.name, command);
-		cmdlist.push(command.name);
-	}
+  for (const file of commandFiles) {
+  	const command = require(`./commands/${file}`);
+    if(command.format==="gbweb"){
+    commands.push(command);
+  	cmdlist.push(command.name);
+  }
+  }
 	let output = []
 	let newcmds = []
 	for(let i=0;i<cmdlist.length;i++){
@@ -154,15 +158,7 @@ app.get('/',function(req, res) {
 });
 app.use('/client',express.static(__dirname + '/client'));
 var io = require('socket.io')(server);
-sockets = new Discord.Collection();
-const socketFiles = fs.readdirSync('./sockets').filter(file => file.endsWith('.js'));
-for (const file of socketFiles) {
-	const socket = require(`./sockets/${file}`);
 
-	// set a new item in the Collection
-	// with the key as the command name and the value as the exported module
-  sockets.set(socket.name, socket);
-}
 io.sockets.on('connection', function(socket){
         var socketId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
         console.log(commands)
@@ -196,8 +192,7 @@ io.sockets.on('connection', function(socket){
             list.shift(); let args = list
 
             if(cmdIsValid(commandName)&&commandName!=='refresh'&&commandName!=='list'){
-            const command = commands.get(commandName)
-              || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+            let command = commands[getCmd(commandName)]
 
               try {
               	command.execute(socket, args, io);

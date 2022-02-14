@@ -1,4 +1,5 @@
-module.exports = {
+module.exports = { 
+ format: 'gbweb',
  name: 'echo',
  description:'first command, echos given text',
  usage:'{input}',
