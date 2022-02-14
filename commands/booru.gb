@@ -5,6 +5,7 @@ name: 'booru',
  description:'Booru Search. Indev.',
  nsfw:true,
  async execute(socket, args, io){
+ if(process.env.REPLIT_ID===true){return socket.emit('output','<p style="color:red">first stage switch failed! this command is not yet compatible with repl.it!<p>')}
  const site = args[0]
  args.shift()
  const Booru = require('booru')
