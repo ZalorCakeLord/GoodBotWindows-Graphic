@@ -2,7 +2,8 @@ module.exports = {
 	format:'gbweb',
 	replitCompatible:true,
 	name: 'ccv',
-	description: 'ccv pennies nickels dimes quarters halfdollars dollars',
+	description: 'gives a visual balance based off input number of coins',
+	usage:'pennies nickels dimes quarters halfdollars dollars',
     args: false,
 	async execute(socket, args, io) {
 		    for(let i=0;i<6;i++){
