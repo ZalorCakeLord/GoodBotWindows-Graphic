@@ -1,0 +1,9 @@
+module.exports = {
+ format: 'gbweb',
+ name: 'note',
+ args: true,
+ description:'make notes. use \n to do newlines, probably can use html/css styling.',
+ async execute(socket, args, io){
+   socket.emit('output','<iframe src="client/notes.html" height="600" width=89% ></iframe>')
+ }
+}

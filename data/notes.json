@@ -1,0 +1,9 @@
+[
+  {
+  name:'test',
+  date:'2/14/22',
+  time:'7:15 pm',
+  tags:['testing','manual'],
+  note:'<p>This is a test of the new note system.</p><p><b>html test!</b></p>'
+  }
+]
