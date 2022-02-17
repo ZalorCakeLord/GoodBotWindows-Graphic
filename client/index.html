@@ -6,11 +6,25 @@
     #goodbotpic {
       position: relative;
     }
-    #goodbotpic img {
+    #goodbotpic img{
       position: absolute;
       top: 0px;
       right: 0px;
       border-radius: 50%;
+    }
+    #goodbotpic span{
+      font-family: Copperplate,Copperplate Gothic Light,fantasy;
+      color:#03A062;
+      font-size:20px;
+      position: absolute;
+      top: 131px;
+      right: 13px;
+    }
+    .boxedred {
+    border-radius: 25px;
+    width: auto;
+    padding: 2px;
+    border: 3px solid red ;
     }
   </style>
 </head>
@@ -30,6 +44,7 @@
 </style>
 <div id="goodbotpic">
   <img src="https://cdn.discordapp.com/avatars/705356460401491978/63ec532fe220f4efc2a5549bafd794f5.webp"/>
+  <b><span class="boxedred" id="span"></span></b>
 </div>
 <h1>Goodbot Windows</h1>
 <h2>Version 2.0-WIP</h2>
@@ -58,5 +73,18 @@
     $('#output').html(data);
     socket.emit('recieved','output')
   })
+
+  var span = document.getElementById('span');
+
+function time() {
+  var d = new Date();
+  var s = d.getSeconds();
+  var m = d.getMinutes();
+  var h = d.getHours();
+  span.textContent =
+    ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+}
+
+setInterval(time, 1000);
 
 </script>
