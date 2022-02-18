@@ -1,0 +1,43 @@
+module.exports = {
+ format: 'gbweb',
+ replitCompatible:true,
+ name: 'gibcat',
+ description:'get a random cat',
+ usage:'{input}',
+ async execute(socket, args, io){
+   const cpm = require('child_process');
+   const fetch = require('node-fetch');
+   const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
+
+
+   socket.emit('output',`<img src='${file}'>`) 
+
+   /*`<iframe srcdoc='<!DOCTYPE html>
+   <html>
+   <head>
+   <style>
+   div.img {
+   background-image: url('${file}');
+   background-position: center center;
+   background-repeat: no-repeat;
+   background-size: contain;
+   width: 100vw;
+   height: 100vh;
+   }
+   h1 {text-align: center;}
+   p {text-align: center;}
+   div {text-align: center;}
+   </style>
+   <title>Goodbot</title>
+   </head>
+   <body>
+   <h1>Here's your cat!</h1>
+   <div class="img"></div>
+   <div id="download">
+
+   <a class="button" href="${file}" download="cat.png">'\\\/ download \\\/'</a>
+   </div>
+   </body>
+   </html>' height="600" width=89% ></iframe>`);
+   */
+}}
