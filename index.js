@@ -163,8 +163,9 @@ app.get('/',function(req, res) {
 });
 app.use('/client',express.static(__dirname + '/client'));
 var io = require('socket.io')(server);
-
+let connected =0
 io.sockets.on('connection', function(socket){
+        connected+=1
 
         var socketId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
         console.log(commands)
@@ -238,7 +239,6 @@ io.sockets.on('connection', function(socket){
 
 
 				socket.on('filecmd',function(data){
-          let stringform = data
           data = data.toLowerCase().split(' ')
           switch (data[0]) {
             case 'dir':
@@ -296,6 +296,7 @@ io.sockets.on('connection', function(socket){
 
         socket.on('disconnect',function(){
             console.log(`user disconnected`)
+            connected-=1
 
 
  });
