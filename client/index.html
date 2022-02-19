@@ -1,9 +1,27 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Goodbot</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron">
   <link rel="SHORTCUT ICON" href="https://i.imgur.com/Rkh8d4n.png" />
   <link rel="icon" href="https://i.imgur.com/Rkh8d4n.png" type="image/ico" />
   <style>
+    .glow {
+      font-size: 80px;
+      color: #03A062.;
+      text-align: center;
+      -webkit-animation: glow 1s ease-in-out infinite alternate;
+      -moz-animation: glow 1s ease-in-out infinite alternate;
+      animation: glow 1s ease-in-out infinite alternate;
+    }
+    @-webkit-keyframes glow {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+      }
+
+      to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+      }
+    }
     #goodbotpic {
       position: relative;
     }
@@ -26,6 +44,11 @@
     width: auto;
     padding: 2px;
     border: 3px solid red ;
+    }
+    .consoleOut {
+      color:green;
+      font-size:20px;
+      font-family: "Orbitron", sans-serif;
     }
   </style>
 </head>

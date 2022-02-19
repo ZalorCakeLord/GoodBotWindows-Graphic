@@ -184,6 +184,9 @@ io.sockets.on('connection', function(socket){
 							console.log('there was an error trying to execute that command!');
 						}*/
         });
+        function log(msg){
+          socket.emit('output',`<p class='glow consoleOut'><b>Console Output:</b></p><p class='consoleOut'>${msg}</p>`)
+        }
 
         console.log('new user!');
         socket.on('start',function(){
@@ -208,7 +211,18 @@ io.sockets.on('connection', function(socket){
               	console.log('there was an error trying to execute that command!');
               }
             }}
-            if(commandName === 'debug'){socket.emit('output',eval(args.join(' ')))}
+            if(commandName === 'debug'){
+              try {
+                  eval(args.join(' '))
+              } catch (e) {
+                  if (e instanceof SyntaxError) {
+                      socket.emit('output',e.message)
+                  } else {
+                      socket.emit('output',e.message)
+                  }
+              }
+
+            }
             if(!cmdIsValid(commandName)&&commandName!=='refresh'&&commandName!=='list'&&commandName!=='debug'){socket.emit('output','Invalid Command!')}
 
 

@@ -5,12 +5,11 @@ module.exports = {
  description:'get a random cat',
  usage:'{input}',
  async execute(socket, args, io){
-   const cpm = require('child_process');
    const fetch = require('node-fetch');
    const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
 
 
-   socket.emit('output',`<img src='${file}' max-width='89%'>`) 
+   socket.emit('output',`<img src='${file}' max-width='89%'>`)
 
    /*`<iframe srcdoc='<!DOCTYPE html>
    <html>

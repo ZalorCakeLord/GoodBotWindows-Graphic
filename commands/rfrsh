@@ -1,0 +1,9 @@
+module.exports = {
+ format:'gbweb',
+ replitCompatible:true,
+ name: 'rfrsh',
+ description:'helloworld',
+ execute(socket, args, io){
+   socket.emit('output', 'goo goo gaga');
+
+}}
