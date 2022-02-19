@@ -77,7 +77,9 @@ function cmdIsValid(cmd){
   }
   return(false)
 }
-
+function addStr(str, index, stringToAdd){
+  return str.substring(0, index) + stringToAdd + str.substring(index, str.length);
+}
 function getCmd(cmd){
   for(let i=0;i<commands.length;i++){
     if(cmd.toLowerCase() === commands[i].name){return i}
@@ -186,6 +188,62 @@ io.sockets.on('connection', function(socket){
 						}*/
         });
         function log(msg){
+
+          if(Array.isArray(msg)){
+            let arrayname = Object.keys({msg})[0]
+
+            let output = [ `
+              Array ${arrayname} <br>
+              <table style="width:100%">
+              <tr>
+                  <th>Position</th>
+                  <th>Entry</th>
+                  <th>Typeof</th>
+                </tr>
+              ` ]
+            for(let i=0;i<msg.length;i++){
+              let preface = i+''
+              preface = preface.padStart(4, '0');
+
+              output.push(`
+                <tr>
+                    <td>${preface}</td>
+                    <td>${JSON.stringify(msg[i])}</td>
+                    <td>${typeof(msg[i])}
+                  </tr>
+                `)
+            }
+
+            output.push('</table>')
+            msg = output.join('')
+          }
+          if(typeof(msg) === 'object'){
+            let name = Object.keys({msg})[0]
+            output = [ `
+              Object : ${name} <br>
+              <table style="width:100%">
+              <tr>
+                  <th>Property</th>
+                  <th>Value</th>
+                  <th>Typeof</th>
+                </tr>
+              ` ]
+            for(let i=0;i<Object.keys(msg).length;i++){
+              console.log(i)
+              console.log(Object.keys(msg).length)
+              let value = msg[Object.keys(msg)[i]]
+              if(JSON.stringify(msg[Object.keys(msg)[i]])!==undefined){value = JSON.stringify(msg[Object.keys(msg)[i]])}
+              output.push(`
+                <tr>
+                    <td>${Object.keys(msg)[i]}</td>
+                    <td>${value}</td>
+                    <td>${typeof(msg[Object.keys(msg)[i]])}
+                  </tr>
+                `)
+            }
+            output.push('</table>')
+            msg = output.join('')
+          }
           socket.emit('output',`<p class='glow consoleOut'><b>Console Output:</b></p><p class='consoleOut'>${msg}</p>`)
         }
 
@@ -214,12 +272,13 @@ io.sockets.on('connection', function(socket){
             }}
             if(commandName === 'debug'){
               try {
-                  eval(args.join(' '))
+                  let full =args.join(' ')
+                  eval(full)
               } catch (e) {
                   if (e instanceof SyntaxError) {
-                      socket.emit('output',e.message)
+                      log('Syntax Error' + e.message)
                   } else {
-                      socket.emit('output',e.message)
+                      log(e.message)
                   }
               }
 
