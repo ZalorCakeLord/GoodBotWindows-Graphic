@@ -10,7 +10,7 @@ module.exports = {
    const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
 
 
-   socket.emit('output',`<img src='${file}'>`) 
+   socket.emit('output',`<img src='${file}' max-width='89%'>`) 
 
    /*`<iframe srcdoc='<!DOCTYPE html>
    <html>

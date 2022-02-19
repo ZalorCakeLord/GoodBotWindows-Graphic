@@ -61,7 +61,7 @@ function isCompatible(file){
 //command handling my way now, new format, using .gb and the format property
 let commands = []
 cmdlist = []
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.gb'));
+let commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.gb'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
   if(command.format==="gbweb"){
@@ -89,7 +89,7 @@ function refreshCommands(){
 	commands = []
 	oldcmds = cmdlist
 	cmdlist = []
-	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.gb'));
+	commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.gb'));
   for (const file of commandFiles) {
   	const command = require(`./commands/${file}`);
     if(command.format==="gbweb"){
@@ -107,7 +107,7 @@ function refreshCommands(){
 			desc +=`<li><h3>${cmdlist[i]}</h3>\n`
 			if (command.aliases) desc+=(`<b>Aliases:</b> ${command.aliases.join(', ')}.\n`);
 			if (command.description) desc+=(`<b>Description:</b> ${command.description}\n`);
-			if (command.usage) desc+=(`<b>Usage:</b> ${prefix}${command.name} ${command.usage}\n`);
+			if (command.usage) desc+=(`<b>Usage:</b> ${command.name} ${command.usage}\n`);
 			desc+=`</li>\n`
 			newcmds.push(desc)
 		}
@@ -193,7 +193,7 @@ io.sockets.on('connection', function(socket){
         socket.on('cmd',function(input){
             let list = input.split(' ')
             let commandName = list[0].toLowerCase()
-						if(commandName === 'refresh'){socket.emit('output',refreshCommands())}
+						if(commandName === 'refresh'){let newlist = refreshCommands(); socket.emit('output',newlist)}
 						if(commandName === 'list'){socket.emit('output',listCommands())}
             list.shift(); let args = list
 
