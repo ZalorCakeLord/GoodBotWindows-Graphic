@@ -218,6 +218,7 @@ io.sockets.on('connection', function(socket){
             msg = output.join('')
           }
           if(typeof(msg) === 'object'){
+            let orig = msg
             let name = Object.keys({msg})[0]
             output = [ `
               Object : ${name} <br>
@@ -237,7 +238,7 @@ io.sockets.on('connection', function(socket){
                 <tr>
                     <td>${Object.keys(msg)[i]}</td>
                     <td>${value}</td>
-                    <td>${typeof(msg[Object.keys(msg)[i]])}
+                    <td>${typeof(msg[Object.keys(msg)[i]])}</td>
                   </tr>
                 `)
             }
