@@ -3,7 +3,14 @@ module.exports = {
  name: 'note',
  args: true,
  description:'make notes. use \n to do newlines, probably can use html/css styling. WIP, <br><p style="color:red">currently non functional</p>',
+ usage:'mode(read/write) name tags,no,spaces body',
  async execute(socket, args, io){
-   socket.emit('output','<iframe src="client/notes.html" height="600" width=89% ></iframe>')
+   let mode = args[0]
+   if(mode === 'write'){
+     let name = args[1]
+     let tags = args[2].split(',')
+     args.splice(0,3)
+     let body = args.join(' ')
+   }
  }
 }

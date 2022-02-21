@@ -3,7 +3,7 @@ module.exports = {
  replitCompatible:true,
  name: 'echo',
  description:'first command, echos given text',
- usage:'{input}',
+ usage:'{input} (brackets not required)',
  execute(socket, args, io){
    socket.emit('output', args.join(' '));
 
